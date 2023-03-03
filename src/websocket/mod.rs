@@ -3,7 +3,11 @@ use tokio_tungstenite::{connect_async, tungstenite::protocol::Message, WebSocket
 
 use crate::{
     payloads::register::StreamDeckPluginRegister,
-    streamdeck::{arguments::StreamDeckArgs, client::StreamDeckClient},
+    streamdeck::{
+        arguments::StreamDeckArgs,
+        client::StreamDeckClient,
+        events::{event_received::EventReceived, message_sent::StreamDeckMessage},
+    },
 };
 
 pub async fn connect_streamdeck(
@@ -15,7 +19,8 @@ pub async fn connect_streamdeck(
 
     let (mut write, read) = ws_stream.split();
 
-    let (tx, rx) = futures_channel::mpsc::unbounded::<String>();
+    let (tx, rx) = futures_channel::mpsc::unbounded::<EventReceived>();
+    let (tx_message, rx_message) = futures_channel::mpsc::unbounded::<String>();
 
     tokio::spawn(async move {
         read.for_each(|message| async {
@@ -25,32 +30,28 @@ pub async fn connect_streamdeck(
         .await;
     });
 
-    register_plugin(&mut write, &args.register_event, &args.plugin_uuid).await;
+    let stdin_to_ws = rx_message.map(|f| Ok(Message::text(f))).forward(write);
 
-    Ok(StreamDeckClient {
-        received_events: rx,
-    })
+    tokio::spawn(async move {
+        stdin_to_ws.await.unwrap();
+    });
+
+    let mut client = StreamDeckClient::new(rx, tx_message);
+
+    client
+        .register_plugin(&args.register_event, &args.plugin_uuid)
+        .await;
+
+    Ok(client)
 }
 
-fn handle_message(message_bytes: Vec<u8>, tx: &futures_channel::mpsc::UnboundedSender<String>) {
+fn handle_message(
+    message_bytes: Vec<u8>,
+    tx: &futures_channel::mpsc::UnboundedSender<EventReceived>,
+) {
     let message = String::from_utf8(message_bytes).unwrap();
 
-    tx.unbounded_send(message).unwrap();
-}
-
-async fn register_plugin(
-    sink: &mut SplitSink<
-        WebSocketStream<tokio_tungstenite::MaybeTlsStream<tokio::net::TcpStream>>,
-        Message,
-    >,
-    event: &String,
-    uuid: &String,
-) {
-    let payload = serde_json::to_string(&StreamDeckPluginRegister {
-        event: event.clone(),
-        uuid: uuid.clone(),
-    })
-    .unwrap();
-
-    sink.send(Message::text(payload)).await.unwrap();
+    if let Ok(event) = EventReceived::from_json(&message) {
+        tx.unbounded_send(event).unwrap();
+    }
 }
