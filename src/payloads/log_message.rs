@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::streamdeck::events::EVENT_LOG_MESSAGE;
+use crate::streamdeck::events::event_title::StreamDeckEventTitle;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StreamDeckLogMessage {
@@ -11,7 +11,7 @@ pub struct StreamDeckLogMessage {
 impl StreamDeckLogMessage {
     pub fn new(message: String) -> Self {
         StreamDeckLogMessage {
-            event: EVENT_LOG_MESSAGE.to_string(),
+            event: StreamDeckEventTitle::LogMessage.to_string(),
             payload: StreamDeckLogMessagePayload { message },
         }
     }
