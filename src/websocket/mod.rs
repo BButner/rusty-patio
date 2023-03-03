@@ -1,13 +1,9 @@
-use futures_util::{stream::SplitSink, SinkExt, StreamExt};
-use tokio_tungstenite::{connect_async, tungstenite::protocol::Message, WebSocketStream};
+use futures_util::StreamExt;
 
-use crate::{
-    payloads::register::StreamDeckPluginRegister,
-    streamdeck::{
-        arguments::StreamDeckArgs,
-        client::StreamDeckClient,
-        events::{event_received::EventReceived, message_sent::StreamDeckMessage},
-    },
+use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
+
+use crate::streamdeck::{
+    arguments::StreamDeckArgs, client::StreamDeckClient, events::event_received::EventReceived,
 };
 
 pub async fn connect_streamdeck(
@@ -17,7 +13,7 @@ pub async fn connect_streamdeck(
         .await
         .unwrap();
 
-    let (mut write, read) = ws_stream.split();
+    let (write, read) = ws_stream.split();
 
     let (tx, rx) = futures_channel::mpsc::unbounded::<EventReceived>();
     let (tx_message, rx_message) = futures_channel::mpsc::unbounded::<String>();
@@ -51,7 +47,10 @@ fn handle_message(
 ) {
     let message = String::from_utf8(message_bytes).unwrap();
 
-    if let Ok(event) = EventReceived::from_json(&message) {
-        tx.unbounded_send(event).unwrap();
+    match EventReceived::from_json(&message) {
+        Ok(event) => {
+            tx.unbounded_send(event).unwrap();
+        }
+        Err(_) => {}
     }
 }

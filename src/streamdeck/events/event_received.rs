@@ -4,6 +4,7 @@ use super::device_did_connect::DeviceDidConnectEvent;
 
 pub enum EventReceived {
     DeviceDidConnect(DeviceDidConnectEvent),
+    UnknownEvent(String),
 }
 
 impl EventReceived {
@@ -14,8 +15,7 @@ impl EventReceived {
             "deviceDidConnect" => Ok(EventReceived::DeviceDidConnect(
                 serde_json::from_str(json).unwrap(),
             )),
-            // _ => panic!("Unknown event type: {}", event_base.event),
-            _ => Err(format!("Unknown event type: {}", event_base.event).into()),
+            _ => Ok(EventReceived::UnknownEvent(event_base.event)),
         }
     }
 }
