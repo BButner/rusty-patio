@@ -10,10 +10,13 @@ pub async fn connect_streamdeck(args: &StreamDeckArgs) {
 
     let (mut write, read) = ws_stream.split();
 
-    read.for_each(|message| async {
-        let data = message.unwrap().into_data();
-    })
-    .await;
+    tokio::spawn(async move {
+        read.for_each(|message| async {
+            let message_bytes = message.unwrap().into_data();
+            handle_message(message_bytes);
+        })
+        .await;
+    });
 
     register_plugin(&mut write, &args.register_event, &args.plugin_uuid).await;
 }
