@@ -1,3 +1,4 @@
+use anyhow::Result;
 use serde::Serialize;
 
 use crate::payloads::{log_message::StreamDeckLogMessage, register::StreamDeckPluginRegister};
@@ -20,16 +21,11 @@ impl StreamDeckClient {
         }
     }
 
-    async fn send_message(&mut self, message: String) -> Result<(), Box<dyn std::error::Error>> {
-        self.transmit_message.send(message);
-
-        Ok(())
+    async fn send_message(&mut self, message: String) -> Result<()> {
+        self.transmit_message.send(message).map_err(|e| e.into())
     }
 
-    async fn send_json_message<T: Sized + Serialize>(
-        &mut self,
-        message: T,
-    ) -> Result<(), Box<dyn std::error::Error>> {
+    async fn send_json_message<T: Sized + Serialize>(&mut self, message: T) -> Result<()> {
         self.send_message(serde_json::to_string(&message).unwrap())
             .await
     }
@@ -40,7 +36,7 @@ impl StreamDeckClient {
             .unwrap();
     }
 
-    pub async fn log_message(&mut self, message: String) -> Result<(), Box<dyn std::error::Error>> {
+    pub async fn log_message(&mut self, message: String) -> Result<()> {
         self.send_json_message(StreamDeckLogMessage::new(message))
             .await
     }
