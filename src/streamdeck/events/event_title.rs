@@ -6,6 +6,8 @@ impl StreamDeckEventTitle {
     pub const LOG_MESSAGE: &str = "logMessage";
     pub const DEVICE_DID_CONNECT: &str = "deviceDidConnect";
     pub const DEVICE_DID_DISCONNECT: &str = "deviceDidDisconnect";
+    pub const DIAL_PRESS: &str = "dialPress";
+    pub const DIAL_ROTATE: &str = "dialRotate";
     pub const KEY_DOWN: &str = "keyDown";
     pub const KEY_UP: &str = "keyUp";
     pub const SYSTEM_DID_WAKE_UP: &str = "systemDidWakeUp";

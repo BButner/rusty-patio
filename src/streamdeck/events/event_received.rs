@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 use super::{
     appear::AppearEvent, application_monitor_event::ApplicationMonitorEvent,
     device_did_connect::DeviceDidConnectEvent, device_did_disconnect::DeviceDidDisconnectEvent,
-    event_title::StreamDeckEventTitle, key::KeyEvent, system_did_wake_up::SystemDidWakeUpEvent,
+    dial_press::DialPressEvent, dial_rotate::DialRotateEvent, event_title::StreamDeckEventTitle,
+    key::KeyEvent, system_did_wake_up::SystemDidWakeUpEvent,
     title_parameters_did_change::TitleParametersDidChangeEvent, touch_tap::TouchTapEvent,
 };
 
@@ -13,6 +14,8 @@ pub enum EventReceived {
     ApplicationDidTerminate(ApplicationMonitorEvent),
     DeviceDidConnect(DeviceDidConnectEvent),
     DeviceDidDisconnect(DeviceDidDisconnectEvent),
+    DialPress(DialPressEvent),
+    DialRotate(DialRotateEvent),
     KeyDown(KeyEvent),
     KeyUp(KeyEvent),
     SystemDidWakeUp(SystemDidWakeUpEvent),
@@ -69,7 +72,26 @@ impl EventReceived {
                     ))),
                 }
             }
-
+            StreamDeckEventTitle::DIAL_PRESS => {
+                match serde_json::from_str::<DialPressEvent>(json) {
+                    Ok(event) => Ok(EventReceived::DialPress(event)),
+                    Err(e) => Ok(EventReceived::EventDeserializationError(format!(
+                        "{}, {}",
+                        e.to_string(),
+                        &json
+                    ))),
+                }
+            }
+            StreamDeckEventTitle::DIAL_ROTATE => {
+                match serde_json::from_str::<DialRotateEvent>(json) {
+                    Ok(event) => Ok(EventReceived::DialRotate(event)),
+                    Err(e) => Ok(EventReceived::EventDeserializationError(format!(
+                        "{}, {}",
+                        e.to_string(),
+                        &json
+                    ))),
+                }
+            }
             StreamDeckEventTitle::SYSTEM_DID_WAKE_UP => {
                 match serde_json::from_str::<SystemDidWakeUpEvent>(json) {
                     Ok(event) => Ok(EventReceived::SystemDidWakeUp(event)),

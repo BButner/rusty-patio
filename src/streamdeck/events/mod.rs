@@ -2,6 +2,8 @@ pub mod appear;
 pub mod application_monitor_event;
 pub mod device_did_connect;
 pub mod device_did_disconnect;
+pub mod dial_press;
+pub mod dial_rotate;
 pub mod event_received;
 pub mod event_title;
 pub mod key;
