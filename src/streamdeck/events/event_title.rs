@@ -10,6 +10,7 @@ impl StreamDeckEventTitle {
     pub const KEY_UP: &str = "keyUp";
     pub const SYSTEM_DID_WAKE_UP: &str = "systemDidWakeUp";
     pub const TITLE_PARAMETERS_DID_CHANGE: &str = "titleParametersDidChange";
+    pub const TOUCH_TAP: &str = "touchTap";
     pub const WILL_APPEAR: &str = "willAppear";
     pub const WILL_DISAPPEAR: &str = "willDisappear";
 }

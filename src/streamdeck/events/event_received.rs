@@ -5,7 +5,7 @@ use super::{
     appear::AppearEvent, application_monitor_event::ApplicationMonitorEvent,
     device_did_connect::DeviceDidConnectEvent, device_did_disconnect::DeviceDidDisconnectEvent,
     event_title::StreamDeckEventTitle, key::KeyEvent, system_did_wake_up::SystemDidWakeUpEvent,
-    title_parameters_did_change::TitleParametersDidChangeEvent,
+    title_parameters_did_change::TitleParametersDidChangeEvent, touch_tap::TouchTapEvent,
 };
 
 pub enum EventReceived {
@@ -17,6 +17,7 @@ pub enum EventReceived {
     KeyUp(KeyEvent),
     SystemDidWakeUp(SystemDidWakeUpEvent),
     TitleParametersDidChange(TitleParametersDidChangeEvent),
+    TouchTap(TouchTapEvent),
     UnknownEvent(String),
     EventDeserializationError(String),
     WillAppear(AppearEvent),
@@ -89,6 +90,14 @@ impl EventReceived {
                     ))),
                 }
             }
+            StreamDeckEventTitle::TOUCH_TAP => match serde_json::from_str::<TouchTapEvent>(json) {
+                Ok(event) => Ok(EventReceived::TouchTap(event)),
+                Err(e) => Ok(EventReceived::EventDeserializationError(format!(
+                    "{}, {}",
+                    e.to_string(),
+                    &json
+                ))),
+            },
             StreamDeckEventTitle::KEY_DOWN => match serde_json::from_str::<KeyEvent>(json) {
                 Ok(event) => Ok(EventReceived::KeyDown(event)),
                 Err(e) => Ok(EventReceived::EventDeserializationError(format!(

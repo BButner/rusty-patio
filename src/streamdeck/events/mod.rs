@@ -8,3 +8,4 @@ pub mod key;
 pub mod message_sent;
 pub mod system_did_wake_up;
 pub mod title_parameters_did_change;
+pub mod touch_tap;
