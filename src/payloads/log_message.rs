@@ -11,7 +11,7 @@ pub struct StreamDeckLogMessage {
 impl StreamDeckLogMessage {
     pub fn new(message: String) -> Self {
         StreamDeckLogMessage {
-            event: StreamDeckEventTitle::LogMessage.to_string(),
+            event: StreamDeckEventTitle::LOG_MESSAGE.to_string(),
             payload: StreamDeckLogMessagePayload { message },
         }
     }
