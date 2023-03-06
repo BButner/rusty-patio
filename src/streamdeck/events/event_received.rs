@@ -9,12 +9,10 @@ pub enum EventReceived {
 
 impl EventReceived {
     pub fn from_json(json: &str) -> Result<EventReceived, Box<dyn std::error::Error>> {
-        let event_base: EventBase = serde_json::from_str(json).unwrap();
+        let event_base: EventBase = serde_json::from_str(json)?;
 
         match event_base.event.as_str() {
-            "deviceDidConnect" => Ok(EventReceived::DeviceDidConnect(
-                serde_json::from_str(json).unwrap(),
-            )),
+            "deviceDidConnect" => Ok(EventReceived::DeviceDidConnect(serde_json::from_str(json)?)),
             _ => Ok(EventReceived::UnknownEvent(event_base.event)),
         }
     }

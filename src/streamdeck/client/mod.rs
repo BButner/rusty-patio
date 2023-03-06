@@ -1,21 +1,18 @@
-use futures_util::{stream::SplitSink, SinkExt};
 use serde::Serialize;
-use tokio_tungstenite::WebSocketStream;
-use tungstenite::Message;
 
 use crate::payloads::{log_message::StreamDeckLogMessage, register::StreamDeckPluginRegister};
 
-use super::events::{event_received::EventReceived, message_sent::StreamDeckMessage};
+use super::events::event_received::EventReceived;
 
 pub struct StreamDeckClient {
-    pub received_events: futures_channel::mpsc::UnboundedReceiver<EventReceived>,
-    transmit_message: futures_channel::mpsc::UnboundedSender<String>,
+    pub received_events: tokio::sync::mpsc::UnboundedReceiver<EventReceived>,
+    transmit_message: tokio::sync::mpsc::UnboundedSender<String>,
 }
 
 impl StreamDeckClient {
     pub fn new(
-        received_events: futures_channel::mpsc::UnboundedReceiver<EventReceived>,
-        transmit_message: futures_channel::mpsc::UnboundedSender<String>,
+        received_events: tokio::sync::mpsc::UnboundedReceiver<EventReceived>,
+        transmit_message: tokio::sync::mpsc::UnboundedSender<String>,
     ) -> Self {
         StreamDeckClient {
             received_events,
@@ -24,10 +21,9 @@ impl StreamDeckClient {
     }
 
     async fn send_message(&mut self, message: String) -> Result<(), Box<dyn std::error::Error>> {
-        self.transmit_message
-            .send(message)
-            .await
-            .map_err(|e| e.into())
+        self.transmit_message.send(message);
+
+        Ok(())
     }
 
     async fn send_json_message<T: Sized + Serialize>(
