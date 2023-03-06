@@ -1,4 +1,7 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use crate::streamdeck::generic::Coordinates;
 
@@ -19,4 +22,5 @@ pub struct KeyDownEventPayload {
     user_desired_state: Option<u8>,
     #[serde(rename = "isInMultiAction")]
     is_in_multi_action: bool,
+    settings: HashMap<String, Value>,
 }
