@@ -7,16 +7,16 @@ use crate::streamdeck::generic::Coordinates;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DialPressEvent {
-    action: String,
-    event: String,
-    context: String,
-    device: String,
-    payload: DialPressEventPayload,
+    pub action: String,
+    pub event: String,
+    pub context: String,
+    pub device: String,
+    pub payload: DialPressEventPayload,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DialPressEventPayload {
-    settings: HashMap<String, Value>,
-    coordinates: Coordinates,
-    pressed: bool,
+    pub settings: HashMap<String, Value>,
+    pub coordinates: Coordinates,
+    pub pressed: bool,
 }

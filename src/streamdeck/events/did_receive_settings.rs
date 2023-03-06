@@ -7,18 +7,18 @@ use crate::streamdeck::generic::Coordinates;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DidReceiveSettingsEvent {
-    action: String,
-    event: String,
-    context: String,
-    device: String,
-    payload: DidReceiveSettingsEventPayload,
+    pub action: String,
+    pub event: String,
+    pub context: String,
+    pub device: String,
+    pub payload: DidReceiveSettingsEventPayload,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DidReceiveSettingsEventPayload {
-    settings: HashMap<String, Value>,
-    coordinates: Coordinates,
-    is_in_multi_action: bool,
-    state: Option<u8>,
+    pub settings: HashMap<String, Value>,
+    pub coordinates: Coordinates,
+    pub is_in_multi_action: bool,
+    pub state: Option<u8>,
 }

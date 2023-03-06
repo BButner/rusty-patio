@@ -5,11 +5,11 @@ use serde_json::Value;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DidReceiveGlobalSettingsEvent {
-    event: String,
-    payload: DidReceiveGlobalSettingsEventPayload,
+    pub event: String,
+    pub payload: DidReceiveGlobalSettingsEventPayload,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DidReceiveGlobalSettingsEventPayload {
-    settings: HashMap<String, Value>,
+    pub settings: HashMap<String, Value>,
 }

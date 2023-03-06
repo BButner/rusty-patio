@@ -7,31 +7,31 @@ use crate::streamdeck::generic::Coordinates;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TitleParametersDidChangeEvent {
-    action: String,
-    event: String,
-    context: String,
-    device: String,
-    payload: TitleParametersDidChangeEventPayload,
+    pub action: String,
+    pub event: String,
+    pub context: String,
+    pub device: String,
+    pub payload: TitleParametersDidChangeEventPayload,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TitleParametersDidChangeEventPayload {
-    coordinates: Coordinates,
-    settings: HashMap<String, Value>,
-    state: u8,
-    title: String,
-    title_parameters: TitleParameters,
+    pub coordinates: Coordinates,
+    pub settings: HashMap<String, Value>,
+    pub state: u8,
+    pub title: String,
+    pub title_parameters: TitleParameters,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TitleParameters {
-    font_family: String,
-    font_size: u8,
-    font_style: String,
-    font_underline: bool,
-    show_title: bool,
-    title_alignment: String,
-    title_color: String,
+    pub font_family: String,
+    pub font_size: u8,
+    pub font_style: String,
+    pub font_underline: bool,
+    pub show_title: bool,
+    pub title_alignment: String,
+    pub title_color: String,
 }
