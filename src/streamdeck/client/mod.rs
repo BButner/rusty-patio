@@ -1,9 +1,12 @@
 use anyhow::Result;
 use serde::Serialize;
 
-use crate::payloads::{log_message::StreamDeckLogMessage, register::StreamDeckPluginRegister};
+use crate::payloads::{
+    log_message::StreamDeckLogMessage, register::StreamDeckPluginRegister,
+    set_image::StreamDeckSetImageMessage,
+};
 
-use super::events::event_received::EventReceived;
+use super::{events::event_received::EventReceived, generic::StreamDeckTarget};
 
 pub struct StreamDeckClient {
     pub received_events: tokio::sync::mpsc::UnboundedReceiver<EventReceived>,
@@ -39,5 +42,18 @@ impl StreamDeckClient {
     pub async fn log_message(&mut self, message: String) -> Result<()> {
         self.send_json_message(StreamDeckLogMessage::new(message))
             .await
+    }
+
+    pub async fn set_image(
+        &mut self,
+        context: String,
+        image: String,
+        target: StreamDeckTarget,
+        state: Option<u8>,
+    ) -> Result<()> {
+        self.send_json_message(StreamDeckSetImageMessage::new(
+            context, image, target, state,
+        ))
+        .await
     }
 }

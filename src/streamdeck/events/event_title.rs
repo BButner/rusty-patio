@@ -15,6 +15,7 @@ impl StreamDeckEventTitle {
     pub const PI_DID_APPEAR: &str = "propertyInspectorDidAppear";
     pub const PI_DID_DISAPPEAR: &str = "propertyInspectorDidDisappear";
     pub const SEND_TO_PLUGIN: &str = "sendToPlugin";
+    pub const SET_IMAGE: &str = "setImage";
     pub const SYSTEM_DID_WAKE_UP: &str = "systemDidWakeUp";
     pub const TITLE_PARAMETERS_DID_CHANGE: &str = "titleParametersDidChange";
     pub const TOUCH_TAP: &str = "touchTap";
