@@ -18,10 +18,12 @@ pub async fn connect_streamdeck(
     let (tx, rx) = tokio::sync::mpsc::unbounded_channel::<EventReceived>();
     let (tx_message, mut rx_message) = tokio::sync::mpsc::unbounded_channel::<String>();
 
-    while let Some(Ok(message)) = read.next().await {
-        let message_bytes = message.into_data();
-        handle_message(message_bytes, tx.clone());
-    }
+    tokio::spawn(async move {
+        while let Some(Ok(message)) = read.next().await {
+            let message_bytes = message.into_data();
+            handle_message(message_bytes, tx.clone());
+        }
+    });
 
     tokio::spawn(async move {
         while let Some(message) = rx_message.recv().await {
