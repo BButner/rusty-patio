@@ -7,6 +7,7 @@ impl StreamDeckEventTitle {
     pub const DEVICE_DID_CONNECT: &str = "deviceDidConnect";
     pub const DEVICE_DID_DISCONNECT: &str = "deviceDidDisconnect";
     pub const KEY_DOWN: &str = "keyDown";
+    pub const KEY_UP: &str = "keyUp";
     pub const SYSTEM_DID_WAKE_UP: &str = "systemDidWakeUp";
     pub const TITLE_PARAMETERS_DID_CHANGE: &str = "titleParametersDidChange";
     pub const WILL_APPEAR: &str = "willAppear";

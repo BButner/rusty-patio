@@ -4,8 +4,7 @@ use serde::{Deserialize, Serialize};
 use super::{
     appear::AppearEvent, application_monitor_event::ApplicationMonitorEvent,
     device_did_connect::DeviceDidConnectEvent, device_did_disconnect::DeviceDidDisconnectEvent,
-    event_title::StreamDeckEventTitle, key_down::KeyDownEvent,
-    system_did_wake_up::SystemDidWakeUpEvent,
+    event_title::StreamDeckEventTitle, key::KeyEvent, system_did_wake_up::SystemDidWakeUpEvent,
     title_parameters_did_change::TitleParametersDidChangeEvent,
 };
 
@@ -14,7 +13,8 @@ pub enum EventReceived {
     ApplicationDidTerminate(ApplicationMonitorEvent),
     DeviceDidConnect(DeviceDidConnectEvent),
     DeviceDidDisconnect(DeviceDidDisconnectEvent),
-    KeyDown(KeyDownEvent),
+    KeyDown(KeyEvent),
+    KeyUp(KeyEvent),
     SystemDidWakeUp(SystemDidWakeUpEvent),
     TitleParametersDidChange(TitleParametersDidChangeEvent),
     UnknownEvent(String),
@@ -89,8 +89,16 @@ impl EventReceived {
                     ))),
                 }
             }
-            StreamDeckEventTitle::KEY_DOWN => match serde_json::from_str::<KeyDownEvent>(json) {
+            StreamDeckEventTitle::KEY_DOWN => match serde_json::from_str::<KeyEvent>(json) {
                 Ok(event) => Ok(EventReceived::KeyDown(event)),
+                Err(e) => Ok(EventReceived::EventDeserializationError(format!(
+                    "{}, {}",
+                    e.to_string(),
+                    &json
+                ))),
+            },
+            StreamDeckEventTitle::KEY_UP => match serde_json::from_str::<KeyEvent>(json) {
+                Ok(event) => Ok(EventReceived::KeyUp(event)),
                 Err(e) => Ok(EventReceived::EventDeserializationError(format!(
                     "{}, {}",
                     e.to_string(),
