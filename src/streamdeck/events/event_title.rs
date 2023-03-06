@@ -8,6 +8,8 @@ impl StreamDeckEventTitle {
     pub const DEVICE_DID_DISCONNECT: &str = "deviceDidDisconnect";
     pub const DIAL_PRESS: &str = "dialPress";
     pub const DIAL_ROTATE: &str = "dialRotate";
+    pub const DID_RECEIVE_SETTINGS: &str = "didReceiveSettings";
+    pub const DID_RECEIVE_GLOBAL_SETTINGS: &str = "didReceiveGlobalSettings";
     pub const KEY_DOWN: &str = "keyDown";
     pub const KEY_UP: &str = "keyUp";
     pub const PI_DID_APPEAR: &str = "propertyInspectorDidAppear";
