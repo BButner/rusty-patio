@@ -1,11 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 use super::{
-    device_did_connect::DeviceDidConnectEvent, device_did_disconnect::DeviceDidDisconnectEvent,
-    event_title::StreamDeckEventTitle,
+    application_monitor_event::ApplicationMonitorEvent, device_did_connect::DeviceDidConnectEvent,
+    device_did_disconnect::DeviceDidDisconnectEvent, event_title::StreamDeckEventTitle,
 };
 
 pub enum EventReceived {
+    ApplicationDidLaunch(ApplicationMonitorEvent),
+    ApplicationDidTerminate(ApplicationMonitorEvent),
     DeviceDidConnect(DeviceDidConnectEvent),
     DeviceDidDisconnect(DeviceDidDisconnectEvent),
     UnknownEvent(String),
@@ -16,6 +18,12 @@ impl EventReceived {
         let event_base: EventBase = serde_json::from_str(json)?;
 
         match event_base.event.as_str() {
+            StreamDeckEventTitle::APPLICATION_DID_LAUNCH => Ok(
+                EventReceived::ApplicationDidLaunch(serde_json::from_str(json)?),
+            ),
+            StreamDeckEventTitle::APPLICATION_DID_TERMINATE => Ok(
+                EventReceived::ApplicationDidTerminate(serde_json::from_str(json)?),
+            ),
             StreamDeckEventTitle::DEVICE_DID_CONNECT => {
                 Ok(EventReceived::DeviceDidConnect(serde_json::from_str(json)?))
             }
