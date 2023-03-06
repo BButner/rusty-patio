@@ -5,7 +5,8 @@ use super::{
     appear::AppearEvent, application_monitor_event::ApplicationMonitorEvent,
     device_did_connect::DeviceDidConnectEvent, device_did_disconnect::DeviceDidDisconnectEvent,
     dial_press::DialPressEvent, dial_rotate::DialRotateEvent, event_title::StreamDeckEventTitle,
-    key::KeyEvent, system_did_wake_up::SystemDidWakeUpEvent,
+    key::KeyEvent, pi_appear::PIAppearEvent, send_to_plugin::SendToPluginEvent,
+    system_did_wake_up::SystemDidWakeUpEvent,
     title_parameters_did_change::TitleParametersDidChangeEvent, touch_tap::TouchTapEvent,
 };
 
@@ -18,6 +19,9 @@ pub enum EventReceived {
     DialRotate(DialRotateEvent),
     KeyDown(KeyEvent),
     KeyUp(KeyEvent),
+    PropertyInspectorDidAppear(PIAppearEvent),
+    PropertyInspectorDidDisappear(PIAppearEvent),
+    SendToPlugin(SendToPluginEvent),
     SystemDidWakeUp(SystemDidWakeUpEvent),
     TitleParametersDidChange(TitleParametersDidChangeEvent),
     TouchTap(TouchTapEvent),
@@ -85,6 +89,36 @@ impl EventReceived {
             StreamDeckEventTitle::DIAL_ROTATE => {
                 match serde_json::from_str::<DialRotateEvent>(json) {
                     Ok(event) => Ok(EventReceived::DialRotate(event)),
+                    Err(e) => Ok(EventReceived::EventDeserializationError(format!(
+                        "{}, {}",
+                        e.to_string(),
+                        &json
+                    ))),
+                }
+            }
+            StreamDeckEventTitle::PI_DID_APPEAR => {
+                match serde_json::from_str::<AppearEvent>(json) {
+                    Ok(event) => Ok(EventReceived::WillAppear(event)),
+                    Err(e) => Ok(EventReceived::EventDeserializationError(format!(
+                        "{}, {}",
+                        e.to_string(),
+                        &json
+                    ))),
+                }
+            }
+            StreamDeckEventTitle::PI_DID_DISAPPEAR => {
+                match serde_json::from_str::<AppearEvent>(json) {
+                    Ok(event) => Ok(EventReceived::WillDisappear(event)),
+                    Err(e) => Ok(EventReceived::EventDeserializationError(format!(
+                        "{}, {}",
+                        e.to_string(),
+                        &json
+                    ))),
+                }
+            }
+            StreamDeckEventTitle::SEND_TO_PLUGIN => {
+                match serde_json::from_str::<SendToPluginEvent>(json) {
+                    Ok(event) => Ok(EventReceived::SendToPlugin(event)),
                     Err(e) => Ok(EventReceived::EventDeserializationError(format!(
                         "{}, {}",
                         e.to_string(),
