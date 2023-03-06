@@ -48,26 +48,22 @@ pub struct StreamDeckInfo {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct StreamDeckApplication {
     pub font: String,
     pub language: String,
     pub platform: String,
-    #[serde(rename = "platformVersion")]
     pub platform_version: String,
     pub version: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct StreamDeckColors {
-    #[serde(rename = "buttonMouseOverBackgroundColor")]
     pub button_mouse_over_background_color: String,
-    #[serde(rename = "buttonPressedBackgroundColor")]
     pub button_pressed_background_color: String,
-    #[serde(rename = "buttonPressedBorderColor")]
     pub button_pressed_border_color: String,
-    #[serde(rename = "buttonPressedTextColor")]
     pub button_pressed_text_color: String,
-    #[serde(rename = "highlightColor")]
     pub highlight_color: String,
 }
 

@@ -15,12 +15,11 @@ pub struct KeyDownEvent {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct KeyDownEventPayload {
     coordinates: Coordinates,
     state: Option<u8>,
-    #[serde(rename = "userDesiredState")]
     user_desired_state: Option<u8>,
-    #[serde(rename = "isInMultiAction")]
     is_in_multi_action: bool,
     settings: HashMap<String, Value>,
 }
