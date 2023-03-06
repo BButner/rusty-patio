@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::{
     application_monitor_event::ApplicationMonitorEvent, device_did_connect::DeviceDidConnectEvent,
     device_did_disconnect::DeviceDidDisconnectEvent, event_title::StreamDeckEventTitle,
+    system_did_wake_up::SystemDidWakeUpEvent,
 };
 
 pub enum EventReceived {
@@ -10,6 +11,7 @@ pub enum EventReceived {
     ApplicationDidTerminate(ApplicationMonitorEvent),
     DeviceDidConnect(DeviceDidConnectEvent),
     DeviceDidDisconnect(DeviceDidDisconnectEvent),
+    SystemDidWakeUp(SystemDidWakeUpEvent),
     UnknownEvent(String),
 }
 
@@ -30,6 +32,9 @@ impl EventReceived {
             StreamDeckEventTitle::DEVICE_DID_DISCONNECT => Ok(EventReceived::DeviceDidDisconnect(
                 serde_json::from_str(json)?,
             )),
+            StreamDeckEventTitle::SYSTEM_DID_WAKE_UP => {
+                Ok(EventReceived::SystemDidWakeUp(serde_json::from_str(json)?))
+            }
             _ => Ok(EventReceived::UnknownEvent(event_base.event)),
         }
     }
