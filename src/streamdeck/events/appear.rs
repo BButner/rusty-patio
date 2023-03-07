@@ -17,7 +17,7 @@ pub struct AppearEvent {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AppearEventPayload {
-    pub controller: String,
+    pub controller: Option<String>,
     pub settings: HashMap<String, Value>,
     pub coordinates: Coordinates,
     pub state: Option<u8>,
