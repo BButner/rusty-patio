@@ -4,7 +4,8 @@ use serde::Serialize;
 
 use crate::payloads::{
     log_message::StreamDeckLogMessage, register::StreamDeckPluginRegister,
-    set_image::StreamDeckSetImageMessage, set_title::StreamDeckSetTitleMessage,
+    set_image::StreamDeckSetImageMessage, set_settings::StreamDeckSetSettingsMessage,
+    set_title::StreamDeckSetTitleMessage,
 };
 
 use super::{events::event_received::EventReceived, generic::StreamDeckTarget};
@@ -80,5 +81,14 @@ impl StreamDeckClient {
             context, title, target, state,
         ))
         .await
+    }
+
+    pub async fn set_settings<T: Sized + Serialize>(
+        &mut self,
+        context: String,
+        payload: T,
+    ) -> Result<()> {
+        self.send_json_message(StreamDeckSetSettingsMessage::new(context, payload))
+            .await
     }
 }
