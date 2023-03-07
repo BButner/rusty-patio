@@ -8,8 +8,6 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.69"
 base64 = "0.21.0"
-futures = "0.3.26"
-futures-channel = { version = "0.3.26", features = ["sink"] }
 futures-util = "0.3.26"
 mime_guess = "2.0.4"
 serde = { version = "1.0.152", features = ["derive"] }
