@@ -3,7 +3,7 @@ use base64::{engine::general_purpose, Engine as _};
 use serde::Serialize;
 
 use crate::payloads::{
-    get_settings::StreamDeckGetSettingsMessage, log_message::StreamDeckLogMessage,
+    event_context::StreamDeckEventContextMessage, log_message::StreamDeckLogMessage,
     open_url::StreamDeckOpenUrlMessage, register::StreamDeckPluginRegister,
     set_image::StreamDeckSetImageMessage, set_settings::StreamDeckSetSettingsMessage,
     set_title::StreamDeckSetTitleMessage,
@@ -119,7 +119,7 @@ impl StreamDeckClient {
     }
 
     pub async fn get_settings(&mut self, context: String) -> Result<()> {
-        self.send_json_message(StreamDeckGetSettingsMessage {
+        self.send_json_message(StreamDeckEventContextMessage {
             event: StreamDeckEventTitle::GET_SETTINGS.to_string(),
             context,
         })
@@ -127,8 +127,24 @@ impl StreamDeckClient {
     }
 
     pub async fn get_global_settings(&mut self, context: String) -> Result<()> {
-        self.send_json_message(StreamDeckGetSettingsMessage {
+        self.send_json_message(StreamDeckEventContextMessage {
             event: StreamDeckEventTitle::GET_GLOBAL_SETTINGS.to_string(),
+            context,
+        })
+        .await
+    }
+
+    pub async fn show_alert(&mut self, context: String) -> Result<()> {
+        self.send_json_message(StreamDeckEventContextMessage {
+            event: StreamDeckEventTitle::SHOW_ALERT.to_string(),
+            context,
+        })
+        .await
+    }
+
+    pub async fn show_ok(&mut self, context: String) -> Result<()> {
+        self.send_json_message(StreamDeckEventContextMessage {
+            event: StreamDeckEventTitle::SHOW_OK.to_string(),
             context,
         })
         .await
