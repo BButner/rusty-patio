@@ -10,7 +10,8 @@ use crate::payloads::{
     open_url::StreamDeckOpenUrlMessage, register::StreamDeckPluginRegister,
     set_feedback::StreamDeckSetFeedbackMessage,
     set_feedback_layout::StreamDeckSetFeedbackLayoutMessage, set_image::StreamDeckSetImageMessage,
-    set_settings::StreamDeckSetSettingsMessage, set_title::StreamDeckSetTitleMessage,
+    set_settings::StreamDeckSetSettingsMessage, set_state::StreamDeckSetStateMessage,
+    set_title::StreamDeckSetTitleMessage,
 };
 
 use super::{
@@ -162,6 +163,12 @@ impl StreamDeckClient {
 
     pub async fn set_feedback_layout(&mut self, context: String, layout: String) {
         self.send_json_message(StreamDeckSetFeedbackLayoutMessage::new(context, layout))
+            .await
+            .unwrap();
+    }
+
+    pub async fn set_state(&mut self, context: String, state: u8) {
+        self.send_json_message(StreamDeckSetStateMessage::new(context, state))
             .await
             .unwrap();
     }
