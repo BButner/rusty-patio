@@ -15,10 +15,7 @@ use crate::payloads::{
     set_title::StreamDeckSetTitleMessage, switch_to_profile::StreamDeckSwitchToProfileMessage,
 };
 
-use super::{
-    events::{event_received::EventReceived, event_title::StreamDeckEventTitle},
-    generic::StreamDeckTarget,
-};
+use super::events::{event_received::EventReceived, event_title::StreamDeckEventTitle};
 
 pub struct StreamDeckClient {
     pub received_events: tokio::sync::mpsc::UnboundedReceiver<EventReceived>,
@@ -60,7 +57,7 @@ impl StreamDeckClient {
         &mut self,
         context: String,
         image_path: String,
-        target: StreamDeckTarget,
+        target: u8,
         state: Option<u8>,
     ) -> Result<()> {
         let image_bytes = tokio::fs::read(&image_path).await?;
