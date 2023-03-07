@@ -8,7 +8,10 @@ use crate::payloads::{
     set_title::StreamDeckSetTitleMessage,
 };
 
-use super::{events::event_received::EventReceived, generic::StreamDeckTarget};
+use super::{
+    events::{event_received::EventReceived, event_title::StreamDeckEventTitle},
+    generic::StreamDeckTarget,
+};
 
 pub struct StreamDeckClient {
     pub received_events: tokio::sync::mpsc::UnboundedReceiver<EventReceived>,
@@ -88,7 +91,24 @@ impl StreamDeckClient {
         context: String,
         payload: T,
     ) -> Result<()> {
-        self.send_json_message(StreamDeckSetSettingsMessage::new(context, payload))
-            .await
+        self.send_json_message(StreamDeckSetSettingsMessage {
+            event: StreamDeckEventTitle::SET_SETTINGS.to_string(),
+            context,
+            payload,
+        })
+        .await
+    }
+
+    pub async fn set_global_settings<T: Sized + Serialize>(
+        &mut self,
+        context: String,
+        payload: T,
+    ) -> Result<()> {
+        self.send_json_message(StreamDeckSetSettingsMessage {
+            event: StreamDeckEventTitle::SET_GLOBAL_SETTINGS.to_string(),
+            context,
+            payload,
+        })
+        .await
     }
 }
