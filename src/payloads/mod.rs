@@ -1,3 +1,4 @@
+pub mod get_settings;
 pub mod log_message;
 pub mod open_url;
 pub mod register;

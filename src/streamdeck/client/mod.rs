@@ -3,9 +3,10 @@ use base64::{engine::general_purpose, Engine as _};
 use serde::Serialize;
 
 use crate::payloads::{
-    log_message::StreamDeckLogMessage, open_url::StreamDeckOpenUrlMessage,
-    register::StreamDeckPluginRegister, set_image::StreamDeckSetImageMessage,
-    set_settings::StreamDeckSetSettingsMessage, set_title::StreamDeckSetTitleMessage,
+    get_settings::StreamDeckGetSettingsMessage, log_message::StreamDeckLogMessage,
+    open_url::StreamDeckOpenUrlMessage, register::StreamDeckPluginRegister,
+    set_image::StreamDeckSetImageMessage, set_settings::StreamDeckSetSettingsMessage,
+    set_title::StreamDeckSetTitleMessage,
 };
 
 use super::{
@@ -115,5 +116,21 @@ impl StreamDeckClient {
     pub async fn open_url(&mut self, url: String) -> Result<()> {
         self.send_json_message(StreamDeckOpenUrlMessage::new(url))
             .await
+    }
+
+    pub async fn get_settings(&mut self, context: String) -> Result<()> {
+        self.send_json_message(StreamDeckGetSettingsMessage {
+            event: StreamDeckEventTitle::GET_SETTINGS.to_string(),
+            context,
+        })
+        .await
+    }
+
+    pub async fn get_global_settings(&mut self, context: String) -> Result<()> {
+        self.send_json_message(StreamDeckGetSettingsMessage {
+            event: StreamDeckEventTitle::GET_GLOBAL_SETTINGS.to_string(),
+            context,
+        })
+        .await
     }
 }
