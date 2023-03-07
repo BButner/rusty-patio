@@ -8,7 +8,7 @@ use serde_json::Value;
 use crate::payloads::{
     event_context::StreamDeckEventContextMessage, log_message::StreamDeckLogMessage,
     open_url::StreamDeckOpenUrlMessage, register::StreamDeckPluginRegister,
-    set_feedback::StreamDeckSetFeedbackMessage,
+    send_to_pi::StreamDeckSendToPIMessage, set_feedback::StreamDeckSetFeedbackMessage,
     set_feedback_layout::StreamDeckSetFeedbackLayoutMessage, set_image::StreamDeckSetImageMessage,
     set_settings::StreamDeckSetSettingsMessage, set_state::StreamDeckSetStateMessage,
     set_title::StreamDeckSetTitleMessage, switch_to_profile::StreamDeckSwitchToProfileMessage,
@@ -89,6 +89,16 @@ impl StreamDeckClient {
             context, device, profile,
         ))
         .await
+    }
+
+    pub async fn send_to_property_inspector(
+        &mut self,
+        context: String,
+        action: String,
+        payload: HashMap<String, Value>,
+    ) -> Result<()> {
+        self.send_json_message(StreamDeckSendToPIMessage::new(action, context, payload))
+            .await
     }
 
     pub async fn set_title(
