@@ -3,9 +3,9 @@ use base64::{engine::general_purpose, Engine as _};
 use serde::Serialize;
 
 use crate::payloads::{
-    log_message::StreamDeckLogMessage, register::StreamDeckPluginRegister,
-    set_image::StreamDeckSetImageMessage, set_settings::StreamDeckSetSettingsMessage,
-    set_title::StreamDeckSetTitleMessage,
+    log_message::StreamDeckLogMessage, open_url::StreamDeckOpenUrlMessage,
+    register::StreamDeckPluginRegister, set_image::StreamDeckSetImageMessage,
+    set_settings::StreamDeckSetSettingsMessage, set_title::StreamDeckSetTitleMessage,
 };
 
 use super::{
@@ -110,5 +110,10 @@ impl StreamDeckClient {
             payload,
         })
         .await
+    }
+
+    pub async fn open_url(&mut self, url: String) -> Result<()> {
+        self.send_json_message(StreamDeckOpenUrlMessage::new(url))
+            .await
     }
 }
