@@ -1,12 +1,16 @@
+use std::collections::HashMap;
+
 use anyhow::Result;
 use base64::{engine::general_purpose, Engine as _};
 use serde::Serialize;
+use serde_json::Value;
 
 use crate::payloads::{
     event_context::StreamDeckEventContextMessage, log_message::StreamDeckLogMessage,
     open_url::StreamDeckOpenUrlMessage, register::StreamDeckPluginRegister,
-    set_image::StreamDeckSetImageMessage, set_settings::StreamDeckSetSettingsMessage,
-    set_title::StreamDeckSetTitleMessage,
+    set_feedback::StreamDeckSetFeedbackMessage,
+    set_feedback_layout::StreamDeckSetFeedbackLayoutMessage, set_image::StreamDeckSetImageMessage,
+    set_settings::StreamDeckSetSettingsMessage, set_title::StreamDeckSetTitleMessage,
 };
 
 use super::{
@@ -148,5 +152,17 @@ impl StreamDeckClient {
             context,
         })
         .await
+    }
+
+    pub async fn set_feedback(&mut self, context: String, payload: HashMap<String, Value>) {
+        self.send_json_message(StreamDeckSetFeedbackMessage::new(context, payload))
+            .await
+            .unwrap();
+    }
+
+    pub async fn set_feedback_layout(&mut self, context: String, layout: String) {
+        self.send_json_message(StreamDeckSetFeedbackLayoutMessage::new(context, layout))
+            .await
+            .unwrap();
     }
 }
