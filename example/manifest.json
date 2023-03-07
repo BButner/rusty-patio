@@ -1,0 +1,40 @@
+{
+	"SDKVersion": "2",
+	"Author": "Your Name",
+	"CodePath": "",
+	"CodePathMac": "rp-example",
+	"CodePathWin": "rp-example.exe",
+	"Description": "Rusty Patio Example Plugin",
+	"Icon": "./Images/cpu",
+	"Name": "RP Example Plugin",
+	"Version": "0.0",
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "10.11"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Software": {
+		"MinimumVersion": "5.0"
+	},
+	"Actions": [
+		{
+		  "Icon": "./Images/cpu",
+		  "Name": "Basic Counter",
+		  "States": [
+			{
+			  "Image": "./Images/cpu",
+			  "TitleAlignment": "middle",
+			  "FontSize": "17"
+			}
+		  ],
+		  "SupportedInMultiActions": false,
+		  "Tooltip": "Checks if Orion is running",
+		  "UUID": "com.example.counter"
+		}
+	]
+}
