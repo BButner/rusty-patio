@@ -11,7 +11,7 @@ use crate::payloads::{
     set_feedback::StreamDeckSetFeedbackMessage,
     set_feedback_layout::StreamDeckSetFeedbackLayoutMessage, set_image::StreamDeckSetImageMessage,
     set_settings::StreamDeckSetSettingsMessage, set_state::StreamDeckSetStateMessage,
-    set_title::StreamDeckSetTitleMessage,
+    set_title::StreamDeckSetTitleMessage, switch_to_profile::StreamDeckSwitchToProfileMessage,
 };
 
 use super::{
@@ -77,6 +77,18 @@ impl StreamDeckClient {
         } else {
             Err(anyhow::anyhow!("Could not determine mime type"))
         }
+    }
+
+    pub async fn switch_to_profile(
+        &mut self,
+        context: String,
+        device: String,
+        profile: String,
+    ) -> Result<()> {
+        self.send_json_message(StreamDeckSwitchToProfileMessage::new(
+            context, device, profile,
+        ))
+        .await
     }
 
     pub async fn set_title(
