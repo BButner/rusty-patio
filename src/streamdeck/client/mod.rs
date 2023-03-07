@@ -4,7 +4,7 @@ use serde::Serialize;
 
 use crate::payloads::{
     log_message::StreamDeckLogMessage, register::StreamDeckPluginRegister,
-    set_image::StreamDeckSetImageMessage,
+    set_image::StreamDeckSetImageMessage, set_title::StreamDeckSetTitleMessage,
 };
 
 use super::{events::event_received::EventReceived, generic::StreamDeckTarget};
@@ -67,5 +67,18 @@ impl StreamDeckClient {
         } else {
             Err(anyhow::anyhow!("Could not determine mime type"))
         }
+    }
+
+    pub async fn set_title(
+        &mut self,
+        context: String,
+        title: String,
+        target: u8,
+        state: Option<u8>,
+    ) -> Result<()> {
+        self.send_json_message(StreamDeckSetTitleMessage::new(
+            context, title, target, state,
+        ))
+        .await
     }
 }
