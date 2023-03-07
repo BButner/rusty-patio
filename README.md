@@ -23,7 +23,7 @@ match client {
 		while let Some(event) = client.received_events.recv().await {
 			match event {
 				EventReceived::WillAppear(event) => {
-					let _ = clinet.log_message(format!("WillAppear Fired: {:?}", event)).await;
+					let _ = client.log_message(format!("WillAppear Fired: {:?}", event)).await;
 				}
 				// the rest of the events you want to handle
 			}
