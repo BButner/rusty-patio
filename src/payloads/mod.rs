@@ -3,6 +3,7 @@ pub mod log_message;
 pub mod open_url;
 pub mod register;
 pub mod send_to_pi;
+pub mod send_to_plugin;
 pub mod set_feedback;
 pub mod set_feedback_layout;
 pub mod set_image;
