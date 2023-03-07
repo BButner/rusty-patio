@@ -46,3 +46,5 @@ The exmaple directory in this repo contains a ready-to-run example counter plugi
 1. Run the `build.sh` script
 2. Copy the directory `target/com.example.rp-example.sdPlugin` to `~/Library/Application Support/com.elgato.StreamDeck/Plugins`
 3. Restart your Stream Deck software, and add the "Basic Counter" under "Custom" to a button, and press the button!
+
+⚠ **Note:** This repository is in its early stages, and as such there may be bugs. If you find any, please open an issue or PR!
