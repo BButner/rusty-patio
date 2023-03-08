@@ -1,5 +1,7 @@
 # Rusty Patio (Unofficial Rust Stream Deck SDK)
 
+[![crates.io](https://img.shields.io/crates/v/rusty-patio.svg)](https://crates.io/crates/rusty-patio)
+
 This repository contains core functionality to allow users to create plugins for the [Elgato Stream Deck](https://www.elgato.com/en/welcome-to-stream-deck), in [Rust](https://www.rust-lang.org/).
 
 ## How to Use
