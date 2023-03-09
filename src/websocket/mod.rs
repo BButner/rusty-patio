@@ -34,6 +34,7 @@ pub async fn connect_streamdeck(
     let mut client = StreamDeckClient::new(rx, tx_message);
 
     client
+        .transmitter
         .register_plugin(&args.register_event, &args.plugin_uuid)
         .await;
 

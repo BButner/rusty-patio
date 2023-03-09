@@ -17,20 +17,14 @@ use crate::payloads::{
 
 use super::events::{event_received::EventReceived, event_title::StreamDeckEventTitle};
 
-pub struct StreamDeckClient {
-    pub received_events: tokio::sync::mpsc::UnboundedReceiver<EventReceived>,
+#[derive(Clone)]
+pub struct StreamDeckClientTransmitter {
     transmit_message: tokio::sync::mpsc::UnboundedSender<String>,
 }
 
-impl StreamDeckClient {
-    pub fn new(
-        received_events: tokio::sync::mpsc::UnboundedReceiver<EventReceived>,
-        transmit_message: tokio::sync::mpsc::UnboundedSender<String>,
-    ) -> Self {
-        StreamDeckClient {
-            received_events,
-            transmit_message,
-        }
+impl StreamDeckClientTransmitter {
+    pub fn new(transmit_message: tokio::sync::mpsc::UnboundedSender<String>) -> Self {
+        StreamDeckClientTransmitter { transmit_message }
     }
 
     async fn send_message(&mut self, message: String) -> Result<()> {
@@ -202,5 +196,22 @@ impl StreamDeckClient {
         self.send_json_message(StreamDeckSendToPluginMessage::new(context, action, payload))
             .await
             .unwrap();
+    }
+}
+
+pub struct StreamDeckClient {
+    pub received_events: tokio::sync::mpsc::UnboundedReceiver<EventReceived>,
+    pub transmitter: StreamDeckClientTransmitter,
+}
+
+impl StreamDeckClient {
+    pub fn new(
+        received_events: tokio::sync::mpsc::UnboundedReceiver<EventReceived>,
+        transmit_message: tokio::sync::mpsc::UnboundedSender<String>,
+    ) -> Self {
+        StreamDeckClient {
+            received_events,
+            transmitter: StreamDeckClientTransmitter::new(transmit_message),
+        }
     }
 }

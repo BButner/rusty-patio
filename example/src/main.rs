@@ -20,6 +20,7 @@ async fn main() {
                     if !buttons.contains_key(&event.context) {
                         buttons.insert(event.context.clone(), 0);
                         client
+                            .transmitter
                             .set_title(
                                 event.context.clone(),
                                 "0".to_string(),
@@ -34,6 +35,7 @@ async fn main() {
                     if let Some(count) = buttons.get_mut(&event.context) {
                         *count += 1;
                         client
+                            .transmitter
                             .set_title(
                                 event.context.clone(),
                                 count.to_string().clone(),
