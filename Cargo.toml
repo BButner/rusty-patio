@@ -2,7 +2,7 @@
 authors = ["BButner"]
 description = "Unofficial Stream Deck SDK for Rust"
 name = "rusty-patio"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 homepage = "https://github.com/bbutner/rusty-patio"
 repository = "https://github.com/bbutner/rusty-patio"

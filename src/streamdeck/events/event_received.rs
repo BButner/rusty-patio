@@ -120,8 +120,8 @@ impl EventReceived {
                 }
             }
             StreamDeckEventTitle::PI_DID_APPEAR => {
-                match serde_json::from_str::<AppearEvent>(json) {
-                    Ok(event) => Ok(EventReceived::WillAppear(event)),
+                match serde_json::from_str::<PIAppearEvent>(json) {
+                    Ok(event) => Ok(EventReceived::PropertyInspectorDidAppear(event)),
                     Err(e) => Ok(EventReceived::EventDeserializationError(format!(
                         "{}, {}",
                         e.to_string(),
@@ -130,8 +130,8 @@ impl EventReceived {
                 }
             }
             StreamDeckEventTitle::PI_DID_DISAPPEAR => {
-                match serde_json::from_str::<AppearEvent>(json) {
-                    Ok(event) => Ok(EventReceived::WillDisappear(event)),
+                match serde_json::from_str::<PIAppearEvent>(json) {
+                    Ok(event) => Ok(EventReceived::PropertyInspectorDidDisappear(event)),
                     Err(e) => Ok(EventReceived::EventDeserializationError(format!(
                         "{}, {}",
                         e.to_string(),
