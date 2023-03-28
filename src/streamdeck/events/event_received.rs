@@ -5,7 +5,8 @@ use super::{
     appear::AppearEvent, application_monitor_event::ApplicationMonitorEvent,
     device_did_connect::DeviceDidConnectEvent, device_did_disconnect::DeviceDidDisconnectEvent,
     dial_press::DialPressEvent, dial_rotate::DialRotateEvent,
-    did_receive_global_settings::DidReceiveGlobalSettingsEvent, event_title::StreamDeckEventTitle,
+    did_receive_global_settings::DidReceiveGlobalSettingsEvent,
+    did_receive_settings::DidReceiveSettingsEvent, event_title::StreamDeckEventTitle,
     key::KeyEvent, pi_appear::PIAppearEvent, send_to_plugin::SendToPluginEvent,
     system_did_wake_up::SystemDidWakeUpEvent,
     title_parameters_did_change::TitleParametersDidChangeEvent, touch_tap::TouchTapEvent,
@@ -18,7 +19,7 @@ pub enum EventReceived {
     DeviceDidDisconnect(DeviceDidDisconnectEvent),
     DialPress(DialPressEvent),
     DialRotate(DialRotateEvent),
-    DidReceiveSettings(DidReceiveGlobalSettingsEvent),
+    DidReceiveSettings(DidReceiveSettingsEvent),
     DidReceiveGlobalSettings(DidReceiveGlobalSettingsEvent),
     KeyDown(KeyEvent),
     KeyUp(KeyEvent),
@@ -100,7 +101,7 @@ impl EventReceived {
                 }
             }
             StreamDeckEventTitle::DID_RECEIVE_SETTINGS => {
-                match serde_json::from_str::<DidReceiveGlobalSettingsEvent>(json) {
+                match serde_json::from_str::<DidReceiveSettingsEvent>(json) {
                     Ok(event) => Ok(EventReceived::DidReceiveSettings(event)),
                     Err(e) => Ok(EventReceived::EventDeserializationError(format!(
                         "{}, {}",
